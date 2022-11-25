@@ -91,7 +91,7 @@ def _encode(val, ebuf, sbuf):
     ebuf.write(struct.pack(TYP2FMT[typ], len_))
     ebuf.write(byts)
     sbuf[val] = len(sbuf)
-  # TRUE, FALSE and NONE
+  # TRUE, FALSE and NULL
   elif val == True:
     ebuf.write(struct.pack('<B', TRUE))
   elif val == False:
@@ -112,12 +112,10 @@ def _encode(val, ebuf, sbuf):
       _encode(val[key], ebuf, sbuf)
     ebuf.write(struct.pack('<B', END))
   else:
-    raise NotImplementedError()
+    raise NotImplementedError
 
 
 def encode(val):
-  '''
-  '''
   ebuf = io.BytesIO()
   _encode(val, ebuf, {})
   ebuf.seek(0)
@@ -125,25 +123,33 @@ def encode(val):
 
 
 TYP2LEN = [
+  # INT
   1, 2, 4, 8,
+  # FLOAT
   4, 8,
+  # STR
   1, 4,
+  # REF
   1, 4
 ]
 
 
 TYP2VAL = [
+  # INT
   None, None, None, None,
+  # FLOAT
   None, None,
+  # STR
   None, None,
+  # REF
   None, None,
+  # TRUE, FALSE and NULL
   True, False, None
 ]
 
 
 class StopDecoding(Exception):
-  '''
-  '''
+  pass
 
 
 def _decode(ebuf, sbuf):
@@ -160,7 +166,7 @@ def _decode(ebuf, sbuf):
   elif typ <= 0x09:
     idx = struct.unpack_from(TYP2FMT[typ], ebuf.read(TYP2LEN[typ]))[0]
     val = sbuf[idx]
-  # TRUE, FALSE and NONE
+  # TRUE, FALSE and NULL
   elif typ <= 0x0C:
     val = TYP2VAL[typ]
   # ARRAY
@@ -189,6 +195,4 @@ def _decode(ebuf, sbuf):
 
 
 def decode(byts):
-  '''
-  '''
   return _decode(io.BytesIO(byts), [])
