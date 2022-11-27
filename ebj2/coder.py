@@ -42,13 +42,13 @@ def _encode(val, ebuf, sbuf):
     if val < 0:
       ran = -val - 1
     else:
+      if val <= 0xEF:
+        ebuf.write(struct.pack('<B', val + 0x10))
+        return
       ran = val
     if ran <= 0x7FFF:
       if ran <= 0x7F:
-        if ran <= 0x77:
-          typ = None
-        else:
-          typ = INT8
+        typ = INT8
       else:
         typ = INT16
     else:
@@ -56,11 +56,8 @@ def _encode(val, ebuf, sbuf):
         typ = INT32
       else:
         typ = INT64
-    if typ == None:
-      ebuf.write(struct.pack('<B', val + 0x88))
-    else:
-      ebuf.write(struct.pack('<B', typ))
-      ebuf.write(struct.pack(TYP2FMT[typ], val))
+    ebuf.write(struct.pack('<B', typ))
+    ebuf.write(struct.pack(TYP2FMT[typ], val))
   # FLOAT
   elif isinstance(val, float):
     # XXX: FLOAT32
@@ -190,7 +187,7 @@ def _decode(ebuf, sbuf):
       except StopDecoding:
         break
   else:
-    return typ - 0x88
+    return typ - 0x10
   return val
 
 

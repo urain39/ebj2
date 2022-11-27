@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ebj2',
-    version='v0.0.1-alpha',
+    version='v0.0.1-beta',
     description=(
         'Embedded Binary JSON'
     ),
