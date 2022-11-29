@@ -1,7 +1,12 @@
+import io
 import ebj2
 
 
 def test(x):
+  buf = io.BytesIO()
+  ebj2.dump(x, buf)
+  buf.seek(0)
+  assert ebj2.load(buf) == x
   assert ebj2.loads(ebj2.dumps(x)) == x
 
 
@@ -67,6 +72,7 @@ test([[1], [1], [[2], [[{0: []}], [0, [789922]]]]])
 
 
 # OBJECT
+test({})
 test({'abc': []})
 test({'abc': [], 'cba': {False: None}})
 test([{'abc': []}, {None: [{}]}])

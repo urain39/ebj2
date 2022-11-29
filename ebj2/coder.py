@@ -36,7 +36,7 @@ TYP2FMT = [
 ]
 
 
-def _encode(val, ebuf, sbuf):
+def _encode(val, ebuf, sbuf, /):
   # INT
   if isinstance(val, int) and not isinstance(val, bool):
     if val < 0:
@@ -119,6 +119,10 @@ def encode(val):
   return ebuf.read()
 
 
+def encode_fp(val, fp):
+  return _encode(val, fp, {})
+
+
 TYP2LEN = [
   # INT
   1, 2, 4, 8,
@@ -149,19 +153,19 @@ class StopDecoding(Exception):
   pass
 
 
-def _decode(ebuf, sbuf):
-  typ = struct.unpack_from('<B', ebuf.read(1))[0]
+def _decode(ebuf, sbuf, /):
+  typ = struct.unpack('<B', ebuf.read(1))[0]
   # INT
   if typ <= 0x05:
-    val = struct.unpack_from(TYP2FMT[typ], ebuf.read(TYP2LEN[typ]))[0]
+    val = struct.unpack(TYP2FMT[typ], ebuf.read(TYP2LEN[typ]))[0]
   # STR
   elif typ <= 0x07:
-    len_ = struct.unpack_from(TYP2FMT[typ], ebuf.read(TYP2LEN[typ]))[0]
+    len_ = struct.unpack(TYP2FMT[typ], ebuf.read(TYP2LEN[typ]))[0]
     val = ebuf.read(len_).decode('utf-8')
     sbuf.append(val)
   # REF
   elif typ <= 0x09:
-    idx = struct.unpack_from(TYP2FMT[typ], ebuf.read(TYP2LEN[typ]))[0]
+    idx = struct.unpack(TYP2FMT[typ], ebuf.read(TYP2LEN[typ]))[0]
     val = sbuf[idx]
   # TRUE, FALSE and NULL
   elif typ <= 0x0C:
@@ -193,3 +197,7 @@ def _decode(ebuf, sbuf):
 
 def decode(byts):
   return _decode(io.BytesIO(byts), [])
+
+
+def decode_fp(fp):
+  return _decode(fp, [])
