@@ -19,8 +19,8 @@ EBJ always use little-endian. It is more friendly for morden CPU to parse.
 0x05 float64
 0x06 str8 (uint8 length)
 0x07 str32 (uint32 length)
-0x08 ref8
-0x09 ref32
+0x08 ref8 (str only)
+0x09 ref32 (str only)
 0x0A true
 0x0B false
 0x0C null
@@ -33,6 +33,8 @@ EBJ always use little-endian. It is more friendly for morden CPU to parse.
 ...
 0xFF 239
 ```
+
+> EBJ strXX should be encoded as UTF-8 bytes.
 
 ### How to use EBJ?
 
@@ -52,5 +54,5 @@ msgs = ebj2.loads(byts)
 
 ### Why should i use EBJ?
 
-At least EBJ will save your 33% disk size to store json. Also it is very fast.
+At least EBJ will save your 33% disk space to store json. Also it is very fast.
 (`ebj2` maybe very slow, because it use pure-python, but still usable)
