@@ -5,10 +5,10 @@ from setuptools import setup, find_packages
 
 setup(
     name='ebj2',
-    version='v0.0.1-beta',
-    description=(
-        'Embedded Binary JSON'
-    ),
+    version='v0.0.1',
+    description='Embedded Binary JSON',
+    long_description=(open('README.md').read()),
+    long_description_content_type="text/markdown",
     author='urain39',
     author_email='urain39@qq.com',
     license='MIT',

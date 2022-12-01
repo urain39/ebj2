@@ -41,6 +41,12 @@ EBJ always use little-endian. It is more friendly for morden CPU to parse.
 This repo contains a base Python version EBJ implementation called `ebj2`. The
 following lines show how to use `ebj2` to dump and load EBJ bytes.
 
+Install:
+```sh
+pip install ebj2
+```
+
+Usage:
 ```py
 # Load module
 import ebj2
@@ -50,6 +56,12 @@ byts = ebj2.dumps(['ebj2 is awesome!'])
 
 # Load EBJ
 msgs = ebj2.loads(byts)
+
+# Dump to fp
+ebj2.dump([], fp)
+
+# Load from fp
+ebj2.load(fp)
 ```
 
 ### Why should i use EBJ?
