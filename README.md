@@ -38,7 +38,7 @@ EBJ always use little-endian. It is more friendly for morden CPU to parse.
 
 ### How to use EBJ?
 
-This repo contains a base Python version EBJ implementation called `ebj2`. The
+This repo contains a basic Python version EBJ implementation called `ebj2`. The
 following lines show how to use `ebj2` to dump and load EBJ bytes.
 
 Install:
