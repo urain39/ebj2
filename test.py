@@ -77,3 +77,4 @@ test({'abc': []})
 test({'abc': [], 'cba': {False: None}})
 test([{'abc': []}, {None: [{}]}])
 test({3.0: [{999: {'b': 'b'}}, 'b', {}]})
+

@@ -8,6 +8,13 @@ EBJ is a format that focuses on storing binary json use RIGHT size.
 
 EBJ always use little-endian. It is more friendly for morden CPU to parse.
 
+### Mark Bytes (File Signature)
+
+```py
+            #   Mark       Version
+MARKBYTES = b'\x0E\x0BJ' + b'\x01'
+```
+
 ### Type Codes
 
 ```txt
@@ -48,7 +55,7 @@ pip install ebj2
 
 Usage:
 ```py
-# Load module
+# Load package
 import ebj2
 
 # Dump EBJ
@@ -64,7 +71,7 @@ ebj2.dump([], fp)
 ebj2.load(fp)
 ```
 
-### Why should i use EBJ?
+### Why should I use EBJ?
 
 At least EBJ will save your 33% disk space to store json. Also it is very fast.
 (`ebj2` maybe very slow, because it use pure-python, but still usable)

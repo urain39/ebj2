@@ -36,6 +36,9 @@ TYP2FMT = [
 ]
 
 
+MARKBYTES = b'\x0E\x0BJ\x01'
+
+
 def _encode(val, ebuf, sbuf, /):
   # INT
   if isinstance(val, int) and not isinstance(val, bool):
@@ -114,12 +117,13 @@ def _encode(val, ebuf, sbuf, /):
 
 def encode(val):
   ebuf = io.BytesIO()
-  _encode(val, ebuf, {})
+  encode_fp(val, ebuf)
   ebuf.seek(0)
   return ebuf.read()
 
 
 def encode_fp(val, fp):
+  fp.write(MARKBYTES)
   return _encode(val, fp, {})
 
 
@@ -196,8 +200,18 @@ def _decode(ebuf, sbuf, /):
 
 
 def decode(byts):
-  return _decode(io.BytesIO(byts), [])
+  ebuf = io.BytesIO(byts)
+  return decode_fp(ebuf)
 
 
 def decode_fp(fp):
+  byts = fp.read(4)
+  # Check Mark
+  if byts[0:3] == MARKBYTES[0:3]:
+    # Check Version
+    assert byts[3] == MARKBYTES[3]
+  else:
+    # No MARKBYTES
+    fp.seek(0)
   return _decode(fp, [])
+
